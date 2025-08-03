@@ -197,23 +197,23 @@ Darkly is a web security penetration testing project from 42 School designed to 
 ## Project Structure
 ```
 darkly/
-├── 1-Sql-Injection-In-Members-Search/
+├── 01-Sql-Injection-In-Members-Search/
 │   └── README.md
-├── 2-Sql-Injection-in-Images-Search/
+├── 02-Sql-Injection-in-Images-Search/
 │   └── README.md
-├── 3-XSS-In-Feedback-Form/
+├── 03-XSS-In-Feedback-Form/
 │   └── README.md
-├── 4-Scraping/
+├── 04-Scraping/
 │   └── README.md
-├── 5-Brute-Force-Login/
+├── 05-Brute-Force-Login/
 │   └── README.md
-├── 6-Brute-Force/
+├── 06-Brute-Force/
 │   └── README.md
-├── 7-Admin-Token-encryption/
+├── 07-Admin-Token-encryption/
 │   └── README.md
-├── 8-Path-Traversal/
+├── 08-Path-Traversal/
 │   └── README.md
-├── 9-File-upload/
+├── 09-File-upload/
 │   └── README.md
 ├── 10-Recover-Password/
 │   └── README.md
