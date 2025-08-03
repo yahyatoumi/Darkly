@@ -26,8 +26,7 @@ Darkly is a web security penetration testing project from 42 School designed to 
 
 ### 3. Stored XSS - Feedback Form
 **Type**: Cross-Site Scripting  
-**Impact**: High - Session hijacking and user impersonation  
-**Method**: Injected JavaScript payload: `<img src=x onerror=alert(1337) />`  
+**Impact**: High - Session hijacking and user impersonation
 **Key Learning**: Always sanitize user input and encode output
 
 ### 4. Web Scraping Vulnerability
@@ -56,8 +55,7 @@ Darkly is a web security penetration testing project from 42 School designed to 
 
 ### 8. Path Traversal
 **Type**: File System Access  
-**Impact**: High - Sensitive file disclosure  
-**Method**: Used `../../../../../../../../../etc/passwd` to access system files  
+**Impact**: High - Sensitive file disclosure
 **Key Learning**: Validate and restrict file path inputs
 
 ### 9. File Upload Vulnerability
@@ -68,8 +66,7 @@ Darkly is a web security penetration testing project from 42 School designed to 
 
 ### 10. Password Recovery Bypass
 **Type**: Authentication Bypass  
-**Impact**: High - Password reset for any user  
-**Method**: Modified hidden email field in password reset form  
+**Impact**: High - Password reset for any user
 **Key Learning**: Client-side security is not security
 
 ### 11. Open Redirect
@@ -104,8 +101,7 @@ Darkly is a web security penetration testing project from 42 School designed to 
 - **Browser Developer Tools**: HTML/JavaScript inspection
 
 ### Exploitation Tools
-- **Custom Python Scripts**: Automated attacks (brute force, scraping)
-- **Burp Suite**: Request interception and modification
+- **Custom Scripts**: Automated attacks (brute force, scraping)
 - **Browser Extensions**: Cookie manipulation
 
 ### Cryptographic Tools
@@ -180,7 +176,6 @@ Darkly is a web security penetration testing project from 42 School designed to 
 2. **File permissions** - Proper access controls
 3. **Network segmentation** - Isolate critical systems
 4. **Monitoring and logging** - Detect attacks early
-5. **Regular backups** - Prepare for compromise recovery
 
 ## Tools for Prevention
 
