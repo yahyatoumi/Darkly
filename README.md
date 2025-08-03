@@ -241,11 +241,6 @@ darkly/
 - [TryHackMe](https://tryhackme.com/)
 - [DVWA (Damn Vulnerable Web Application)](https://dvwa.co.uk/)
 
-### Books
-- "The Web Application Hacker's Handbook" by Dafydd Stuttard
-- "Hacking: The Art of Exploitation" by Jon Erickson
-- "The Tangled Web" by Michal Zalewski
-
 ## Conclusion
 
 The Darkly project provides hands-on experience with the most common web application vulnerabilities. Each discovered flaw represents a real-world security issue that developers encounter daily. The key takeaway is that security must be built into applications from the ground up, not added as an afterthought.
