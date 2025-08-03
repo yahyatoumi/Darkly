@@ -7,7 +7,6 @@ const path = require('path');
 // Configuration
 const LOGIN_SUCCESS_INDICATOR = "The flag is";
 const REQUEST_DELAY_MS = 50;
-const MAX_CONCURRENT_REQUESTS = 3;
 const LOG_DIR = './attack_logs';
 
 // Ensure log directory exists
@@ -73,11 +72,7 @@ async function processFiles(targetUrl, usersFile, passwordsFile) {
             }
         };
 
-        await Promise.all(
-            Array(Math.min(MAX_CONCURRENT_REQUESTS, queue.length))
-                .fill()
-                .map(worker)
-        );
+        await worker()
 
         logToFile(logFilePath, `\nAttack completed at ${new Date().toISOString()}`);
     } catch (error) {
