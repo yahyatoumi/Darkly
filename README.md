@@ -1,7 +1,7 @@
-# Darkly - 42 School Web Security Project
+# Darkly - Web Security Project
 
 ## Project Overview
-Darkly is a web security penetration testing project from 42 School designed to teach fundamental web application vulnerabilities and security concepts. The goal is to discover and exploit various security flaws in a deliberately vulnerable web application to capture flags and learn defensive programming practices.
+Darkly is a web security penetration testing project designed to teach fundamental web application vulnerabilities and security concepts. The goal is to discover and exploit various security flaws in a deliberately vulnerable web application to capture flags and learn defensive programming practices.
 
 ## Educational Objectives
 - Understanding common web application vulnerabilities
